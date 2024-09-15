@@ -3,4 +3,5 @@
 
 A collection of GBA programs.
 - gba_simple : The most simple GBA program.
+- gba_sample_01 : Draw random lines on screen.
   
