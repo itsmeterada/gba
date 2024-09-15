@@ -32,8 +32,8 @@ PROGS = $(BASENAME).gba
 BINARY = $(BASENAME).elf
 SRCS1 = $(BASENAME).c
 SRCS2 = vlt_gba_crt0.s
-OBJS = $(SRCS1:.c=.o)
-#OBJS = $(SRCS1:.c=.o) $(SRCS2:.s=.o)
+OBJS1 = $(SRCS1:.c=.o)
+OBJS2 = $(SRCS2:.s=.o)
 
 CFLAGS = -Wall
 CFLAGS += -marm -mthumb-interwork
@@ -74,9 +74,9 @@ ALL: $(PROGS)
 	rm -f $*.o
 	$(AS) -mthumb-interwork -o $*.o $*.s
 
-$(PROGS): $(OBJS)
+$(PROGS): $(OBJS1) $(OBJS2)
 	rm -f $@
-	$(CC) -o $(BINARY) $(OBJS) $(LDFLAGS) $(LIBS)
+	$(CC) -o $(BINARY) $(OBJS1) $(LDFLAGS) $(LIBS)
 	$(OBJCOPY) -v -O binary $(BINARY) $@
 	$(GBAFIX) $(PROGS)
 
