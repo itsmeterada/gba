@@ -27,7 +27,7 @@ OBJCOPY = $(DEVKITARM)/bin/arm-none-eabi-objcopy
 GBAFIX = $(DEVKITPRO)/tools/bin/gbafix
 
 
-BASENAME = gba_simple
+BASENAME = gba_sample_02
 
 PROGS = $(BASENAME).gba
 BINARY = $(BASENAME).elf

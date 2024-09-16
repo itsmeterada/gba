@@ -2,6 +2,8 @@
 UNAME_S := $(shell uname -s)
 
 ifeq ($(UNAME_S),Linux)
+	DEVKITARM=/opt/devkitPro/devkitARM
+	DEVKITPRO=/opt/devkitPro
 endif
 ifeq ($(UNAME_S),Darwin)
 	DEVKITARM=/opt/devkitPro/devkitARM
