@@ -31,7 +31,7 @@ BASENAME = gba_sample_02
 
 PROGS = $(BASENAME).gba
 BINARY = $(BASENAME).elf
-SRCS = $(BASENAME).c
+SRCS = $(BASENAME).c vlt_fixed_math.c
 OBJS = $(SRCS:.c=.o)
 
 CFLAGS = -Wall
