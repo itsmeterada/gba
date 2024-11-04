@@ -142,8 +142,8 @@ vu16_t *vram;
 #define RGB(r,g,b) ((((b)>>3)<<10)+(((g)>>3)<<5)+((r)>>3))
 //u16 surface[WIDTH * HEIGHT] ALIGN(4);
 u16_t clear_color ALIGN(4);
-//vu8_t *buffer;
-vu16_t *buffer;
+//u8_t *buffer;
+u16_t *buffer;
 
 #define drawPixel(x, y, c)	(buffer[y*WIDTH+x] = c)
 #define SETPIXEL(x, y, c)	(buffer[y*WIDTH+x] = c)
@@ -151,15 +151,15 @@ void drawLineEFLA(i32_t x1, i32_t y1, i32_t x2, i32_t y2, u16_t color);
 
 // Controller buttons
 volatile u32_t *BUTTONS = (volatile u32_t*)0x04000130;
-#define BUTTON_A		1
-#define BUTTON_B		2
-#define BUTTON_SELECT	4
-#define BUTTON_START	8
-#define BUTTON_RIGHT	16
-#define BUTTON_LEFT		32
-#define BUTTON_UP		64
-#define BUTTON_DOWN		128
-#define BUTTON_R		256
-#define BUTTON_L		512
+#define BUTTON_A		0
+#define BUTTON_B		1
+#define BUTTON_SELECT	2
+#define BUTTON_START	3
+#define BUTTON_RIGHT	4
+#define BUTTON_LEFT		5
+#define BUTTON_UP		6
+#define BUTTON_DOWN		7
+#define BUTTON_R		8
+#define BUTTON_L		9
 
 #endif // VLT_GBA_H
