@@ -112,18 +112,19 @@ void CODE_IN_IWRAM drawLineEFLA(i32_t x1, i32_t y1, i32_t x2, i32_t y2, u16_t co
   }
 }
 
+
 void CODE_IN_IWRAM checkButtons()
 {
-	buttons[0] = !((*BUTTONS) & BUTTON_A);
-	buttons[1] = !((*BUTTONS) & BUTTON_B);
-	buttons[2] = !((*BUTTONS) & BUTTON_SELECT);
-	buttons[3] = !((*BUTTONS) & BUTTON_START);
-	buttons[4] = !((*BUTTONS) & BUTTON_RIGHT);
-	buttons[5] = !((*BUTTONS) & BUTTON_LEFT);
-	buttons[6] = !((*BUTTONS) & BUTTON_UP);
-	buttons[7] = !((*BUTTONS) & BUTTON_DOWN);
-	buttons[8] = !((*BUTTONS) & BUTTON_R);
-	buttons[9] = !((*BUTTONS) & BUTTON_L);
+	buttons[0] = (~(*BUTTONS) & (1 << BUTTON_A));
+	buttons[1] = (~(*BUTTONS) & (1 << BUTTON_B));
+	buttons[2] = (~(*BUTTONS) & (1 << BUTTON_SELECT));
+	buttons[3] = (~(*BUTTONS) & (1 << BUTTON_START));
+	buttons[4] = (~(*BUTTONS) & (1 << BUTTON_RIGHT));
+	buttons[5] = (~(*BUTTONS) & (1 << BUTTON_LEFT));
+	buttons[6] = (~(*BUTTONS) & (1 << BUTTON_UP));
+	buttons[7] = (~(*BUTTONS) & (1 << BUTTON_DOWN));
+	buttons[8] = (~(*BUTTONS) & (1 << BUTTON_R));
+	buttons[9] = (~(*BUTTONS) & (1 << BUTTON_L));
 }
 
 void CODE_IN_IWRAM DMAFastCopy(void *source, void *dest, u32_t count, u32_t mode)
@@ -154,7 +155,7 @@ int main()
   while(1) {
 		checkButtons();
 		// Clear the draw surface
-    if (buttons[0]) // A button
+    if (buttons[BUTTON_A]) // A button
     {
 		  DMAFastCopy(clear_color, buffer, WIDTH*HEIGHT, (DMA_SRC_FIXED | DMA_DST_INC | DMA_16 | DMA_ENABLE));
     }
