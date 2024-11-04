@@ -23,18 +23,18 @@
 /*
 // Data types
 */
-typedef unsigned char           u8;     /**< Unsigned 8 bit value       */
-typedef unsigned short int      u16;    /**< Unsigned 16 bit value      */
-typedef unsigned int            u32;    /**< Unsigned 32 bit value      */
-typedef signed char             i8;     /**< Signed 8 bit value */
-typedef signed short int        i16;    /**< Signed 16 bit value        */
-typedef signed int              i32;    /**< Signed 32 bit value        */
-typedef volatile u8             vu8;    /**< volatile Unsigned 8 bit value      */
-typedef volatile u16            vu16;   /**< volatile Unigned 16 bit value      */
-typedef volatile u32            vu32;   /**< volatile Unsigned 32 bit value     */
-typedef volatile i8             vi8;    /**< volatile Signed 8 bit value        */
-typedef volatile i16            vi16;   /**< volatile Signed 8 bit value        */
-typedef volatile i32            vi32;   /**< volatile Signed 8 bit value        */
+typedef unsigned char           u8_t;     /**< Unsigned 8 bit value       */
+typedef unsigned short int      u16_t;    /**< Unsigned 16 bit value      */
+typedef unsigned int            u32_t;    /**< Unsigned 32 bit value      */
+typedef signed char             i8_t;     /**< Signed 8 bit value */
+typedef signed short int        i16_t;    /**< Signed 16 bit value        */
+typedef signed int              i32_t;    /**< Signed 32 bit value        */
+typedef volatile u8_t           vu8_t;    /**< volatile Unsigned 8 bit value      */
+typedef volatile u16_t          vu16_t;   /**< volatile Unigned 16 bit value      */
+typedef volatile u32_t          vu32_t;   /**< volatile Unsigned 32 bit value     */
+typedef volatile i8_t           vi8_t;    /**< volatile Signed 8 bit value        */
+typedef volatile i16_t          vi16_t;   /**< volatile Signed 8 bit value        */
+typedef volatile i32_t          vi32_t;   /**< volatile Signed 8 bit value        */
 #ifndef __cplusplus
 /*! C++ compatible bool for C */
 typedef enum { false, true } bool;
@@ -44,13 +44,13 @@ typedef enum { false, true } bool;
 
 #define	REG_BASE				0x04000000
 
-#define REG_DISPCNT		(vu16 *)REG_BASE
-#define REG_VCOUNT		(vu16 *)0x04000006
-#define REG_DISPSTAT	(vu16 *)0x04000004
+#define REG_DISPCNT		(volatile vu16_t *)REG_BASE
+#define REG_VCOUNT		(vu16_t *)0x04000006
+#define REG_DISPSTAT	(vu16_t *)0x04000004
 
-vu16 *scanlineCounter = REG_VCOUNT;
+vu16_t *scanlineCounter = REG_VCOUNT;
 
-//#define MODE5
+// #define MODE5
 #ifdef MODE5
 #define DISP_MODE5	0x05
 #define WIDTH 160
@@ -63,25 +63,25 @@ vu16 *scanlineCounter = REG_VCOUNT;
 
 
 // Background rotation / scale
-#define REG_BG2PA		(vu16 *)0x04000020
-#define REG_BG2PB		(vu16 *)0x04000022
-#define REG_BG2PC		(vu16 *)0x04000024
-#define REG_BG2PD		(vu16 *)0x04000026
-#define REG_BG2X		(vu32 *)0x04000028
-#define REG_BG2Y		(vu32 *)0x0400002C
+#define REG_BG2PA		(vu16_t *)0x04000020
+#define REG_BG2PB		(vu16_t *)0x04000022
+#define REG_BG2PC		(vu16_t *)0x04000024
+#define REG_BG2PD		(vu16_t *)0x04000026
+#define REG_BG2X		(vu32_t *)0x04000028
+#define REG_BG2Y		(vu32_t *)0x0400002C
 
-#define REG_BG2CNT		(vu16 *)0x0400000C
+#define REG_BG2CNT		(vu16_t *)0x0400000C
 
 // Timer data addresses
-#define REG_TM0D				(vu16 *)0x04000100
-#define REG_TM1D				(vu16 *)0x04000104
-#define REG_TM2D				(vu16 *)0x04000108
-#define REG_TM3D				(vu16 *)0x0400010C
+#define REG_TM0D				(vu16_t *)0x04000100
+#define REG_TM1D				(vu16_t *)0x04000104
+#define REG_TM2D				(vu16_t *)0x04000108
+#define REG_TM3D				(vu16_t *)0x0400010C
 // Timer status addresses
-#define REG_TM0CNT				(vu16 *)0x04000102
-#define REG_TM1CNT				(vu16 *)0x04000106
-#define REG_TM2CNT				(vu16 *)0x0400010A
-#define REG_TM3CNT				(vu16 *)0x0400010E
+#define REG_TM0CNT				(vu16_t *)0x04000102
+#define REG_TM1CNT				(vu16_t *)0x04000106
+#define REG_TM2CNT				(vu16_t *)0x0400010A
+#define REG_TM3CNT				(vu16_t *)0x0400010E
 // Timer constants
 #define TIMER_FREQUENCY_SYSTEM	0x00
 #define TIMER_FREQUENCY_64		0x01
@@ -93,21 +93,21 @@ vu16 *scanlineCounter = REG_VCOUNT;
 
 
 // DMA
-#define REG_DMA0SAD	*(vu32*)(REG_BASE + 0x0b0)
-#define REG_DMA0DAD	*(vu32*)(REG_BASE + 0x0b4)
-#define REG_DMA0CNT	*(vu32*)(REG_BASE + 0x0b8)
+#define REG_DMA0SAD	*(vu32_t*)(REG_BASE + 0x0b0)
+#define REG_DMA0DAD	*(vu32_t*)(REG_BASE + 0x0b4)
+#define REG_DMA0CNT	*(vu32_t*)(REG_BASE + 0x0b8)
 //--
-#define REG_DMA1SAD	*(vu32*)(REG_BASE + 0x0bc)
-#define REG_DMA1DAD	*(vu32*)(REG_BASE + 0x0c0)
-#define REG_DMA1CNT	*(vu32*)(REG_BASE + 0x0c4)
+#define REG_DMA1SAD	*(vu32_t*)(REG_BASE + 0x0bc)
+#define REG_DMA1DAD	*(vu32_t*)(REG_BASE + 0x0c0)
+#define REG_DMA1CNT	*(vu32_t*)(REG_BASE + 0x0c4)
 //--
-#define REG_DMA2SAD	*(vu32*)(REG_BASE + 0x0c8)
-#define REG_DMA2DAD	*(vu32*)(REG_BASE + 0x0cc)
-#define REG_DMA2CNT	*(vu32*)(REG_BASE + 0x0d0)
+#define REG_DMA2SAD	*(vu32_t*)(REG_BASE + 0x0c8)
+#define REG_DMA2DAD	*(vu32_t*)(REG_BASE + 0x0cc)
+#define REG_DMA2CNT	*(vu32_t*)(REG_BASE + 0x0d0)
 //--
-#define REG_DMA3SAD	*(vu32*)(REG_BASE + 0x0d4)
-#define REG_DMA3DAD	*(vu32*)(REG_BASE + 0x0d8)
-#define REG_DMA3CNT	*(vu32*)(REG_BASE + 0x0dc)
+#define REG_DMA3SAD	*(vu32_t*)(REG_BASE + 0x0d4)
+#define REG_DMA3DAD	*(vu32_t*)(REG_BASE + 0x0d8)
+#define REG_DMA3CNT	*(vu32_t*)(REG_BASE + 0x0dc)
 //--
 #define DMA_DST_INC		(0<<21)
 #define DMA_DST_DEC		(1<<21)
@@ -135,29 +135,31 @@ vu16 *scanlineCounter = REG_VCOUNT;
 #endif // DEBUG
 
 // VRAM address
-vu16 *vram;
-#define VRAM_ADRS		(vu16 *)0x06000000
+vu16_t *vram;
+#define VRAM_ADRS 		(volatile vu16_t *)0x06000000
+#define VRAM_ADRS1		(volatile vu16_t *)0x06000000
+#define VRAM_ADRS2		(volatile vu16_t *)0x0600A000
 #define RGB(r,g,b) ((((b)>>3)<<10)+(((g)>>3)<<5)+((r)>>3))
 //u16 surface[WIDTH * HEIGHT] ALIGN(4);
-u16 clear_color ALIGN(4);
-//u8 *buffer;
-u16 *buffer;
+u16_t clear_color ALIGN(4);
+//u8_t *buffer;
+u16_t *buffer;
 
 #define drawPixel(x, y, c)	(buffer[y*WIDTH+x] = c)
 #define SETPIXEL(x, y, c)	(buffer[y*WIDTH+x] = c)
-void drawLineEFLA(i32 x1, i32 y1, i32 x2, i32 y2, u16 color);
+void drawLineEFLA(i32_t x1, i32_t y1, i32_t x2, i32_t y2, u16_t color);
 
 // Controller buttons
-volatile u32 *BUTTONS = (volatile u32*)0x04000130;
-#define BUTTON_A		1
-#define BUTTON_B		2
-#define BUTTON_SELECT	4
-#define BUTTON_START	8
-#define BUTTON_RIGHT	16
-#define BUTTON_LEFT		32
-#define BUTTON_UP		64
-#define BUTTON_DOWN		128
-#define BUTTON_R		256
-#define BUTTON_L		512
+volatile u32_t *BUTTONS = (volatile u32_t*)0x04000130;
+#define BUTTON_A		0
+#define BUTTON_B		1
+#define BUTTON_SELECT	2
+#define BUTTON_START	3
+#define BUTTON_RIGHT	4
+#define BUTTON_LEFT		5
+#define BUTTON_UP		6
+#define BUTTON_DOWN		7
+#define BUTTON_R		8
+#define BUTTON_L		9
 
 #endif // VLT_GBA_H

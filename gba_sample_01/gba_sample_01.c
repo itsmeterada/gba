@@ -44,15 +44,15 @@ void CODE_IN_IWRAM waitForVBlank()
 #endif
 }
 
-void CODE_IN_IWRAM *mallocAligned(u32 size, int align)
+void CODE_IN_IWRAM *mallocAligned(u32_t size, int align)
 {
 	void *p = malloc(size + align);
-	if ((u32)p % align) p += ((u32)p % align);
+	if ((u32_t)p % align) p += ((u32_t)p % align);
 	return p;
 }
 
 
-void CODE_IN_IWRAM drawLineEFLA(i32 x1, i32 y1, i32 x2, i32 y2, u16 color)
+void CODE_IN_IWRAM drawLineEFLA(i32_t x1, i32_t y1, i32_t x2, i32_t y2, u16_t color)
 {
   bool yLonger = false;
   int shortLen = y2 - y1;
@@ -110,28 +110,35 @@ void CODE_IN_IWRAM drawLineEFLA(i32 x1, i32 y1, i32 x2, i32 y2, u16 color)
 
 void CODE_IN_IWRAM checkButtons()
 {
-	buttons[0] = !((*BUTTONS) & BUTTON_A);
-	buttons[1] = !((*BUTTONS) & BUTTON_B);
-	buttons[2] = !((*BUTTONS) & BUTTON_SELECT);
-	buttons[3] = !((*BUTTONS) & BUTTON_START);
-	buttons[4] = !((*BUTTONS) & BUTTON_RIGHT);
-	buttons[5] = !((*BUTTONS) & BUTTON_LEFT);
-	buttons[6] = !((*BUTTONS) & BUTTON_UP);
-	buttons[7] = !((*BUTTONS) & BUTTON_DOWN);
-	buttons[8] = !((*BUTTONS) & BUTTON_R);
-	buttons[9] = !((*BUTTONS) & BUTTON_L);
+	buttons[0] = (~(*BUTTONS) & (1 << BUTTON_A));
+	buttons[1] = (~(*BUTTONS) & (1 << BUTTON_B));
+	buttons[2] = (~(*BUTTONS) & (1 << BUTTON_SELECT));
+	buttons[3] = (~(*BUTTONS) & (1 << BUTTON_START));
+	buttons[4] = (~(*BUTTONS) & (1 << BUTTON_RIGHT));
+	buttons[5] = (~(*BUTTONS) & (1 << BUTTON_LEFT));
+	buttons[6] = (~(*BUTTONS) & (1 << BUTTON_UP));
+	buttons[7] = (~(*BUTTONS) & (1 << BUTTON_DOWN));
+	buttons[8] = (~(*BUTTONS) & (1 << BUTTON_R));
+	buttons[9] = (~(*BUTTONS) & (1 << BUTTON_L));
 }
 
-void CODE_IN_IWRAM DMAFastCopy(void *source, void *dest, u32 count, u32 mode)
+void CODE_IN_IWRAM clearBuffer(u16_t color)
 {
-	REG_DMA3SAD = (u32)source;
-	REG_DMA3DAD = (u32)dest;
+  for (int i = 0; i < HEIGHT * WIDTH; i++)
+    buffer[i] = color;
+}
+
+
+void CODE_IN_IWRAM DMAFastCopy(void *source, void *dest, u32_t count, u32_t mode)
+{
+	REG_DMA3SAD = (u32_t)source;
+	REG_DMA3DAD = (u32_t)dest;
 	REG_DMA3CNT = count | mode;
 }
 
-
 int main()
 {
+  bool useDmaToClear = true;
   vram = VRAM_ADRS;
   xorshiftSeed(0x12345678); // Seed the random number generator
 
@@ -140,23 +147,32 @@ int main()
   ((unsigned short*)0x06000000)[136+80*240]=0x03e0;
   ((unsigned short*)0x06000000)[120+96*240]=0x7c00;
 
-  buffer = (u16*)mallocAligned(WIDTH * HEIGHT * sizeof(u16), 4);
+  buffer = (u16_t*)mallocAligned(WIDTH * HEIGHT * sizeof(u16_t), 4);
   clear_color = 0x0000;
+  clearBuffer(clear_color);
 	DMAFastCopy(clear_color, buffer, WIDTH*HEIGHT, (DMA_SRC_FIXED | DMA_DST_INC | DMA_16 | DMA_ENABLE));
 
   while(1) {
 		checkButtons();
 		// Clear the draw surface
-    if (buttons[0]) // A button
+    if (buttons[BUTTON_A]) // A button
     {
-		  DMAFastCopy(clear_color, buffer, WIDTH*HEIGHT, (DMA_SRC_FIXED | DMA_DST_INC | DMA_16 | DMA_ENABLE));
+      if (buttons[BUTTON_B]) // B button
+      {
+        useDmaToClear = false;
+      }
+      if (!useDmaToClear) {
+        clearBuffer(clear_color);
+      } else {
+        DMAFastCopy(clear_color, buffer, WIDTH*HEIGHT, (DMA_SRC_FIXED | DMA_DST_INC | DMA_16 | DMA_ENABLE));
+      }
     }
 
-    u32 x1 = xorshift32() % WIDTH;
-    u32 y1 = xorshift32() % HEIGHT;
-    u32 x2 = xorshift32() % WIDTH;
-    u32 y2 = xorshift32() % HEIGHT;
-    u16 color = xorshift32() & 0xffff;
+    u32_t x1 = xorshift32() % WIDTH;
+    u32_t y1 = xorshift32() % HEIGHT;
+    u32_t x2 = xorshift32() % WIDTH;
+    u32_t y2 = xorshift32() % HEIGHT;
+    u16_t color = xorshift32() & 0xffff;
     drawLineEFLA(x1, y1, x2, y2, color);
  		waitForVBlank();
 		DMAFastCopy(buffer, vram, WIDTH*HEIGHT, (DMA_IMMEDIATE | DMA_16 | DMA_ENABLE));
